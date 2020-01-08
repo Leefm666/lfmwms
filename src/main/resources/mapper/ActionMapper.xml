@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.ActionMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.Action">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="action_name" jdbcType="VARCHAR" property="actionName" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="founder" jdbcType="VARCHAR" property="founder" />
+        <result column="modifie" jdbcType="VARCHAR" property="modifie" />
+    </resultMap>
+    <select id="selectAllAction" resultMap="BaseResultMap" parameterType="com.lfm.wms.model.SysRole">
+        select *
+        from action
+        where 1=1 and founder=#{id} and modifie=#{id}
+    </select>
+    <insert id="addAction" parameterType="hashmap">
+        insert  into action (action_name,url,founder) values (#{actionName},#{url},#{founder})
+    </insert>
+    <select id="selectNoAction" resultMap="BaseResultMap" parameterType="com.lfm.wms.model.SysRole">
+        select *
+        from action
+        where 1=1 and founder=#{id}
+    </select>
+    <update id="updateActionmodifie">
+        update action set modifie=#{roleid} where id=#{actionid}
+    </update>
+    <delete id="deleteAction" parameterType="com.lfm.wms.model.Action">
+        delete from action where id=#{id}
+    </delete>
+
+</mapper>

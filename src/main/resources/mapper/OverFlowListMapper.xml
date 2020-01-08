@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.OverFlowListMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.OverflowList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="overflow_date" jdbcType="DATE" property="overflowDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="overflow_number" jdbcType="VARCHAR" property="overflowNumber"/>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.lfm.wms.model.OverflowList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="overflow_date" jdbcType="DATE" property="overflowDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="overflow_number" jdbcType="VARCHAR" property="overflowNumber"/>
+        <association property="user" javaType="UserInfo">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+            <result column="password" jdbcType="VARCHAR" property="password"/>
+            <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        </association>
+    </resultMap>
+    <select id="getTodayMaxOverFlowListNumber" resultType="String">
+      SELECT MAX(overflow_number) FROM overflow_list WHERE TO_DAYS(overflow_date) = TO_DAYS(NOW())
+    </select>
+    <insert id="insertOverFlowList" useGeneratedKeys="true" keyProperty="id" parameterType="com.lfm.wms.model.OverflowList">
+        insert into overflow_list(overflow_date,remarks,overflow_number,
+   user_id) values (#{overflowDate},
+    #{remarks},#{overflowNumber},#{userId})
+</insert>
+</mapper>

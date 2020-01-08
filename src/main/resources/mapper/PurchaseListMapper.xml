@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.PurchaseListMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.PurchaseList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+        <result column="purchase_date" jdbcType="DATE" property="purchaseDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="supplier_id" jdbcType="INTEGER" property="supplierId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="purchase_number" jdbcType="VARCHAR" property="purchaseNumber"/>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.lfm.wms.model.PurchaseList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+        <result column="purchase_date" jdbcType="DATE" property="purchaseDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="supplier_id" jdbcType="INTEGER" property="supplierId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="purchase_number" jdbcType="VARCHAR" property="purchaseNumber"/>
+        <association property="supplier" javaType="Supplier">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="address" jdbcType="VARCHAR" property="address"/>
+            <result column="concat" jdbcType="VARCHAR" property="concat"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="phone" jdbcType="VARCHAR" property="phone"/>
+            <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        </association>
+        <association property="user" javaType="UserInfo">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+            <result column="password" jdbcType="VARCHAR" property="password"/>
+            <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        </association>
+    </resultMap>
+    <select id="getTodayMaxPurchaseNumber" resultType="String">
+      SELECT MAX(purchase_number) FROM purchase_list WHERE TO_DAYS(purchase_date) = TO_DAYS(NOW())
+    </select>
+    <insert id="insertPurchaseList" useGeneratedKeys="true" keyProperty="id" parameterType="com.lfm.wms.model.PurchaseList">
+        insert into purchase_list(amount_paid,amount_payable,
+    purchase_date,remarks,state,purchase_number,
+    supplier_id,user_id) values (#{amountPaid},#{amountPayable},#{purchaseDate},
+    #{remarks},#{state},#{purchaseNumber},#{supplierId},#{userId})
+</insert>
+    <select id="selectAllPurchase" parameterType="com.lfm.wms.model.PurchaseList" resultMap="BaseResultMap">
+        select *
+        from purchase_list
+        where 1=1
+        <if test="purchaseNumber !=null and purchaseNumber !=''">
+            and purchase_number like concat('%',#{purchaseNumber},'%')
+        </if>
+        <if test="supplierId !=null and supplierId !=''">
+            and supplier_id =#{supplierId}
+        </if>
+    </select>
+    <select id="selectAllPurchase2" parameterType="com.lfm.wms.model.PurchaseList" resultMap="BaseResultMap1">
+        select pl.*,sp.*,ui.* from purchase_list pl,supplier sp
+       ,user_info ui
+      where sp.id= pl.supplier_id and ui.id=pl.user_id
+        <if test="purchaseNumber !=null and purchaseNumber !=''">
+            and purchase_number like concat('%',#{purchaseNumber},'%')
+        </if>
+        <if test="supplierId !=null and supplierId !=''">
+            and supplier_id =#{supplierId}
+        </if>
+        <if test="bPurchaseDate !=null">
+        <if test="ePurchaseDate !=null">
+            and purchase_date between #{bPurchaseDate} and #{ePurchaseDate}
+        </if>
+        </if>
+    </select>
+</mapper>

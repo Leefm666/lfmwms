@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.SaleListMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.SaleList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+        <result column="sale_date" jdbcType="DATE" property="saleDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="sale_number" jdbcType="VARCHAR" property="saleNumber"/>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.lfm.wms.model.SaleList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+        <result column="sale_date" jdbcType="DATE" property="saleDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="sale_number" jdbcType="VARCHAR" property="saleNumber"/>
+        <association property="customer" javaType="Customer">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="address" jdbcType="VARCHAR" property="address"/>
+            <result column="concat" jdbcType="VARCHAR" property="concat"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="phone" jdbcType="VARCHAR" property="phone"/>
+            <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        </association>
+        <association property="user" javaType="UserInfo">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+            <result column="password" jdbcType="VARCHAR" property="password"/>
+            <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        </association>
+    </resultMap>
+    <select id="getTodayMaxSaleLisber" resultType="String" >
+        SELECT MAX(sale_number) FROM sale_list WHERE TO_DAYS(sale_date) = TO_DAYS(NOW())
+    </select>
+    <insert id="insertSaleList" useGeneratedKeys="true" keyProperty="id" parameterType="com.lfm.wms.model.SaleList">
+         insert into sale_list(amount_paid,amount_payable,
+    sale_date,remarks,state,sale_number,
+    customer_id,user_id) values (#{amountPaid},#{amountPayable},#{saleDate},
+    #{remarks},#{state},#{saleNumber},#{customerId},#{userId})
+    </insert>
+    <select id="salectAllSaleList" parameterType="com.lfm.wms.model.SaleList" resultMap="BaseResultMap1">
+        select sl.*,cu.*,ui.* from sale_list sl,customer cu
+        ,user_info ui
+        where cu.id= sl.customer_id and ui.id=sl.user_id
+        <if test="saleNumber !=null and saleNumber !=''">
+            and sale_number like concat('%',#{saleNumber},'%')
+        </if>
+        <if test="customerId !=null and customerId !=''">
+            and customer_id =#{customerId}
+        </if>
+        <if test="bSaleDate !=null">
+            <if test="eSaleDate !=null">
+                and sale_date between #{bSaleDate} and #{eSaleDate}
+            </if>
+        </if>
+    </select>
+</mapper>

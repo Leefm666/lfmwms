@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.GoodsUnitMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.GoodsUnit">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+    <select id="selectAllGoodsUnit" resultMap="BaseResultMap">
+        select * from goodsunit
+    </select>
+    <select id="selctAllGoodsUnitName" resultMap="BaseResultMap">
+        select name from goodsunit
+    </select>
+    <insert id="addGoodsUnit" parameterType="com.lfm.wms.model.GoodsUnit">
+        insert into goodsunit (name) value (#{name})
+    </insert>
+    <delete id="deleteGoodsUnit" parameterType="Integer">
+        delete from goodsunit where id=#{id}
+    </delete>
+</mapper>

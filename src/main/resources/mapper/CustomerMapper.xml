@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.CustomerMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.Customer">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="concat" jdbcType="VARCHAR" property="concat"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+    <select id="selectAllCustomer" parameterType="com.lfm.wms.model.Customer" resultMap="BaseResultMap">
+        select * from customer
+        where 1=1
+        <if test="name !=null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
+    <update id="updateCustomer" parameterType="com.lfm.wms.model.Customer">
+       update customer
+        set address=#{address},concat=#{concat},
+        name=#{name},phone=#{phone},remark=#{remark}
+        where id =
+        #{id}
+    </update>
+    <insert id="addCustomer">
+           insert into supplier (address,concat,name,phone,remark) values (#{address},#{concat},#{name},#{phone},#{remark});
+    </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+          select * from customer
+    </select>
+</mapper>

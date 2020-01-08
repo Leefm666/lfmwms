@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.Goods">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="inventory_quantity" jdbcType="INTEGER" property="inventoryQuantity"/>
+        <result column="min_num" jdbcType="INTEGER" property="minNum"/>
+        <result column="model" jdbcType="VARCHAR" property="model"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="producer" jdbcType="VARCHAR" property="producer"/>
+        <result column="purchasing_price" jdbcType="FLOAT" property="purchasingPrice"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="selling_price" jdbcType="FLOAT" property="sellingPrice"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="type_id" jdbcType="INTEGER" property="typeId"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="last_purchasing_price" jdbcType="FLOAT" property="lastPurchasingPrice"/>
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="com.lfm.wms.model.Goods">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="inventory_quantity" jdbcType="INTEGER" property="inventoryQuantity"/>
+        <result column="min_num" jdbcType="INTEGER" property="minNum"/>
+        <result column="model" jdbcType="VARCHAR" property="model"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="producer" jdbcType="VARCHAR" property="producer"/>
+        <result column="purchasing_price" jdbcType="FLOAT" property="purchasingPrice"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="selling_price" jdbcType="FLOAT" property="sellingPrice"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <!-- <result column="type_id" jdbcType="INTEGER" property="typeId"/>-->
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="last_purchasing_price" jdbcType="FLOAT" property="lastPurchasingPrice"/>
+        <association property="type" javaType="GoodStype">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="P_id" jdbcType="INTEGER" property="pId"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        </association>
+    </resultMap>
+    <select id="selectAllGoods" parameterType="com.lfm.wms.model.Goods" resultMap="BaseResultMap2">
+        select gd.*,gs.id,gs.name
+        from goods gd,goodstype gs
+        where gd.type_id=gs.id
+        <if test="name !=null and name !=''">
+            and gd.name like concat('%',#{name},'%')
+        </if>
+    </select>
+    <select id="selectAllGoods2" parameterType="hashMap" resultMap="BaseResultMap2">
+        select gd.*,gs.id,gs.name
+        from goods gd,goodstype gs
+        where gd.type_id=gs.id
+        <if test="name !=null and name !=''">
+            and gd.name like concat('%',#{name},'%')
+        </if>
+        <if test="typeid !=null and typeid !=''">
+            and gs.id =#{typeid}
+        </if>
+    </select>
+    <insert id="insertGoods" parameterType="com.lfm.wms.model.Goods">
+        insert into goods (code,inventory_quantity,min_num
+        ,model,name,producer,purchasing_price,remarks
+        ,selling_price,unit,type_id,state,last_purchasing_price)
+        values (#{code},#{inventoryQuantity},#{minNum},
+        #{model},#{name},#{producer},#{purchasingPrice},
+        #{remarks},#{sellingPrice},#{unit},#{typeId},#{state},
+        #{lastPurchasingPrice})
+    </insert>
+    <select id="getMaxCode" resultType="String">
+        select max(code)+1 from goods
+    </select>
+    <update id="updateGoods" parameterType="com.lfm.wms.model.Goods">
+      update  goods set code=#{code},inventory_quantity=#{inventoryQuantity},min_num=#{minNum},model=#{model},
+      name=#{name},producer=#{producer},purchasing_price=#{purchasingPrice},remarks=#{remarks},selling_price=#{sellingPrice},
+      unit=#{unit},state=#{state},last_purchasing_price=#{lastPurchasingPrice}
+      where id=#{id}
+    </update>
+    <delete id="deleteGoods" parameterType="Integer">
+        delete from goods where id=#{id}
+    </delete>
+    <select id="findById" parameterType="Integer" resultMap="BaseResultMap2">
+        select * from goods where id=#{id}
+    </select>
+</mapper>

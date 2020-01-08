@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.SysPermissionInitMapper">
+  <resultMap id="BaseResultMap" type="com.lfm.wms.model.SysPermissionInit">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="permission_init" jdbcType="VARCHAR" property="permissionInit" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, url, permission_init, sort
+  </sql>
+
+  <select id="selectAllOrderBySort" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from sys_permission_init
+    order by sort desc
+  </select>
+  <insert id="updatepermurl">
+    insert into sys_permission_init (url,permission_init,sort) values (#{url},#{string},1)
+  </insert>
+  <insert id="insertpermurl" parameterType="com.lfm.wms.model.SysPermissionInit"
+  useGeneratedKeys="true" keyProperty="id">
+    insert into sys_permission_init (url,permission_init,sort) values (#{url},#{permissionInit},1)
+  </insert>
+  <delete id="deletepermission" parameterType="String">
+    delete from sys_permission_init where id=#{perinitid}
+  </delete>
+</mapper>

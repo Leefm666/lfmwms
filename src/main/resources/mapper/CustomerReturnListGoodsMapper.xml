@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.CustomerReturnListGoodsMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.CustomerReturnListGoods">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="model" jdbcType="VARCHAR" property="model"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="customer_return_list_id" jdbcType="INTEGER" property="customerReturnListId"/>
+        <result column="price" jdbcType="FLOAT" property="price"/>
+        <result column="total" jdbcType="FLOAT" property="total"/>
+        <result column="type_id" jdbcType="INTEGER" property="typeId"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <association property="customerReturnList" javaType="CustomerReturnList">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+            <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+            <result column="customer_return_date" jdbcType="DATE" property="customerReturnDate"/>
+            <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+            <result column="user_id" jdbcType="INTEGER" property="userId"/>
+            <result column="customer_return_number" jdbcType="VARCHAR" property="customerReturnNumber"/>
+        </association>
+        <association property="type" javaType="GoodStype">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="P_id" jdbcType="INTEGER" property="pId"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        </association>
+    </resultMap>
+    <insert id="insertCustomerReturnListGoods" parameterType="java.util.List">
+        insert into customer_return_list_goods (code,model,name,num,price
+        ,total,unit,customer_return_list_id,type_id,goods_id)values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.code}
+            ,#{item.model},#{item.name},#{item.num},#{item.price},#{item.total}
+            ,#{item.unit}
+            ,#{item.customerReturnListId},#{item.typeId}
+            ,#{item.goodsId})
+        </foreach>
+    </insert>
+    <select id="selectByCustomerReturnListId" parameterType="com.lfm.wms.model.CustomerReturnList" resultMap="BaseResultMap">
+        select crlg.* from  customer_return_list_goods crlg, customer_return_list crl
+          where crlg.customer_return_list_id=#{id}
+    </select>
+</mapper>

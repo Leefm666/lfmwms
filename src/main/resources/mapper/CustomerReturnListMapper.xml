@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.CustomerReturnListMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.CustomerReturnList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+        <result column="customer_return_date" jdbcType="DATE" property="customerReturnDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="customer_return_number" jdbcType="VARCHAR" property="customerReturnNumber"/>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.lfm.wms.model.CustomerReturnList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid"/>
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable"/>
+        <result column="customer_return_date" jdbcType="DATE" property="customerReturnDate"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="customer_return_number" jdbcType="VARCHAR" property="customerReturnNumber"/>
+        <association property="customer" javaType="Customer">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="address" jdbcType="VARCHAR" property="address"/>
+            <result column="concat" jdbcType="VARCHAR" property="concat"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="phone" jdbcType="VARCHAR" property="phone"/>
+            <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        </association>
+        <association property="user" javaType="UserInfo">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+            <result column="password" jdbcType="VARCHAR" property="password"/>
+            <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        </association>
+    </resultMap>
+    <select id="getTodayMaxCustomerReturnNumber" resultType="String">
+      SELECT MAX(customer_return_number) FROM customer_return_list WHERE TO_DAYS(customer_return_date) = TO_DAYS(NOW())
+    </select>
+    <insert id="insertCustomerReturnList" useGeneratedKeys="true" keyProperty="id" parameterType="com.lfm.wms.model.CustomerReturnList">
+        insert into customer_return_list(amount_paid,amount_payable,
+    customer_return_date,remarks,state,customer_return_number,
+    customer_id,user_id) values (#{amountPaid},#{amountPayable},#{customerReturnDate},
+    #{remarks},#{state},#{customerReturnNumber},#{customerId},#{userId})
+</insert>
+    <select id="selectAllCustomerReturnList" parameterType="com.lfm.wms.model.CustomerReturnList" resultMap="BaseResultMap1">
+        select crl.*,cu.*,ui.* from customer_return_list crl,customer cu
+        ,user_info ui
+        where cu.id= crl.customer_id and ui.id=crl.user_id
+        <if test="customerReturnNumber !=null and customerReturnNumber !=''">
+            and customer_return_number like concat('%',#{customerReturnNumber},'%')
+        </if>
+        <if test="customerId !=null and customerId !=''">
+            and customer_id =#{customerId}
+        </if>
+        <if test="bCustomerReturnDate !=null">
+            <if test="eCustomerReturnDate !=null">
+                and customer_return_date between #{bCustomerReturnDate} and #{bCustomerReturnDate}
+            </if>
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.ActionPermMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.ActionPerm">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="actionid" jdbcType="VARCHAR" property="actionId" />
+        <result column="perinitid" jdbcType="VARCHAR" property="PerInitId" />
+    </resultMap>
+    <insert id="insertpermroid">
+        insert into action_perm (actionid,perinitid)
+        values (#{actionid},#{perminitid})
+    </insert>
+    <select id="selectPerInitId" parameterType="com.lfm.wms.model.Action" resultType="String">
+        select perinitid from action_perm where actionid=#{id}
+    </select>
+    <delete id="deleteActionPerm" parameterType="com.lfm.wms.model.Action">
+        delete from action_perm where actionid=#{id}
+    </delete>
+</mapper>

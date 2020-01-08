@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.ReturnListMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.ReturnList">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid" />
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="return_date" jdbcType="DATE" property="returnDate" />
+        <result column="return_number" jdbcType="VARCHAR" property="returnNumber" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.lfm.wms.model.ReturnList">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="amount_paid" jdbcType="FLOAT" property="amountPaid" />
+        <result column="amount_payable" jdbcType="FLOAT" property="amountPayable" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="return_date" jdbcType="DATE" property="returnDate" />
+        <result column="return_number" jdbcType="VARCHAR" property="returnNumber" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <association property="supplier" javaType="Supplier">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="address" jdbcType="VARCHAR" property="address"/>
+            <result column="concat" jdbcType="VARCHAR" property="concat"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="phone" jdbcType="VARCHAR" property="phone"/>
+            <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        </association>
+        <association property="user" javaType="UserInfo">
+            <id column="id" jdbcType="INTEGER" property="id"/>
+            <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+            <result column="password" jdbcType="VARCHAR" property="password"/>
+            <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        </association>
+    </resultMap>
+    <select id="getTodayMaxReturmListNumber" resultType="String">
+     SELECT MAX(return_number) FROM return_list WHERE TO_DAYS(return_date) = TO_DAYS(NOW())
+    </select>
+    <insert id="insertReturnList" useGeneratedKeys="true" keyProperty="id" parameterType="com.lfm.wms.model.ReturnList">
+          insert into return_list(amount_paid,amount_payable,
+        return_date,remarks,state,return_number,
+        supplier_id,user_id) values (#{amountPaid},#{amountPayable},#{returnDate},
+        #{remarks},#{state},#{returnNumber},#{supplierId},#{userId})
+    </insert>
+    <select id="selectAllReturn" parameterType="com.lfm.wms.model.ReturnList" resultMap="BaseResultMap1">
+        select rl.*,sp.*,ui.* from return_list rl,supplier sp
+        ,user_info ui
+        where sp.id= rl.supplier_id and ui.id=rl.user_id
+        <if test="returnNumber !=null and returnNumber !=''">
+            and return_number like concat('%',#{returnNumber},'%')
+        </if>
+        <if test="supplierId !=null and supplierId !=''">
+            and supplier_id =#{supplierId}
+        </if>
+        <if test="bReturnDate !=null">
+            <if test="eReturnDate !=null">
+                and return_date between #{bReturnDate} and #{eReturnDate}
+            </if>
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>网站后台管理模版</title>
+    <link rel="stylesheet" type="text/css"
+          href="/layui2/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="/css/admin2.css" />
+</head>
+
+<body>
+<div class="page-content-wrap" id="studentSearch">
+    <h5 style="text-align:center;font-size: 20px;line-height: 25px;color:#666">销售单据查询界面</h5>
+    <hr>
+    <div class="layui-form-item">
+        <form class="layui-form" action="">
+            <div class="layui-inline">
+                <label class="layui-form-label">单据号</label>
+                <div class="layui-inline">
+                    <input type="text" id="purchasenum" placeholder="请输入单号"
+                           autocomplete="off" name="saleNumber" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">客户</label>
+                <div class="layui-inline">
+                    <select name="customerId" lay-filter="Type_filter"  id="otype" lay-verify="required">
+                        <option value="">请选择客户</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否已付款</label>
+                <div class="layui-input-inline">
+                    <select name="state" lay-verify="required" lay-search="" >
+                        <!--  <option value="">直接选择或搜索选择</option>-->
+                        <option value="1">已付</option>
+                        <option value="2">未付</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" name="bSaleDate" id="test5" placeholder="yyyy-MM-dd">
+                </div>
+
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" name="eSaleDate" id="test6" placeholder="yyyy-MM-dd">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-inline">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="demo1">搜索</button>
+                </div>
+            </div>
+        </form>
+        <!--    <table class="layui-table"
+                   lay-data="{ url:'/PurchaseList/selectAllPurchaseList', page:true, id:'idTest'}"
+                   lay-filter="demo">
+                <thead>
+                <tr>
+                    <th lay-data="{type:'checkbox', }"></th>
+                    <th lay-data="{field:'purchaseNumber',sort: true}">进货单号</th>
+                    <th lay-data="{field:'purchaseDate'}">进货日期</th>
+                    <th lay-data="{field:'supplier'}">供应商</th>
+                    <th lay-data="{field:'amountPaid'}">进货金额</th>
+                    &lt;!&ndash; <th lay-data="{field:'createTime'}">创建时间</th>&ndash;&gt;
+                    <th lay-data="{field:'userId'}">操作员</th>
+                    <th lay-data="{field:'remarks'}">备注</th>
+                    <th
+                            lay-data="{fixed: 'right', width:220, align:'left', toolbar: '#barDemo'}">
+
+                    </th>
+                    <th
+                            lay-data="{fixed: 'right', width:220, align:'left', toolbar: '#barDemo1'}">
+
+                    </th>
+                </tr>
+                </thead>
+            </table>-->
+        <table class="layui-hide" id="demo"  lay-filter="demo"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="look">查看</a>
+            <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+        </script>
+    </div>
+
+    <script>
+        function createrFormat(o){
+            return o;
+        }
+    </script>
+    <!--<script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="detail">查看</a>
+        <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+    </script>
+    <script type="text/html" id="barDemo1">
+        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="bindUser">绑定用户</a>
+        <a class="layui-btn layui-btn-sm" lay-event="bindAction">绑定操作</a>
+    </script>-->
+    <hr></hr>
+    <h5 style="text-align: center;">@Leefm666毕业设计仓库管理系统</h5>
+</div>
+
+</body>
+<div id="dg" style="display: none">
+    <!--    <div class="layui-inline tool-btn">
+            <button class="layui-btn layui-btn-small site-demo-active"
+                    data-type="tabAdd2" id="tabAdd2">
+                <i class="layui-icon">选择</i>
+            </button>
+        </div>
+        <table class="layui-table"
+               lay-data="{ url:'/Goods/selectAllGoods3',page:true, id:'idTest1'}"
+               lay-filter="demo2">
+            <thead>
+            <tr>
+                <th lay-data="{type:'checkbox', }"></th>
+                <th lay-data="{field:'id',sort: true}">id</th>
+                <th lay-data="{field:'code'}">商品编号</th>
+                <th lay-data="{field:'name'}">商品名称</th>
+                <th lay-data="{field:'model'}">型号</th>
+                <th lay-data="{field:'purchasingPrice'}">采购价</th>
+                <th lay-data="{field:'sellingPrice'}">出售价</th>
+                <th lay-data="{field:'minNum'}">库存下限</th>
+                <th lay-data="{field:'producer'}">生产厂家</th>
+                &lt;!&ndash;    <th lay-data="{fixed: 'right', width:220, align:'left', toolbar: '#barDemo'}"></th>&ndash;&gt;
+            </tr>
+            </thead>
+        </table>
+        <script type="text/html" id="barDemo1">
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="detail">查看</a>
+            <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+        </script>-->
+    <table class="layui-hide" id="dgt"  lay-filter="dgt"></table>
+</div>
+<script src="/layui2/layui.all.js" type="text/javascript"
+        charset="utf-8"></script>
+<script>
+    layui.use(['table','laydate','form'], function() {
+        var $ = layui.jquery,
+            table = layui.table,
+            laydate=layui.laydate,
+            form=layui.form;
+        form.on('submit(demo1)', function(data){
+            /* layer.alert(JSON.stringify(data.field), {
+                  title: '最终的提交信息'
+              })*/
+            console.log(data.field);
+            var customerId=data.field.customerId;
+            var bSaleDate=data.field.bSaleDate;
+            var eSaleDate=data.field.eSaleDate;
+            console.log(customerId);
+            var saleNum=$("#purchasenum").val();
+            table.reload('demo',{
+                method: 'POST'
+                , where: {"saleNumber":saleNum,
+                    "customerId":customerId,
+                    "bSaleDate": bSaleDate,
+                    "eSaleDate": eSaleDate},
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+
+            })
+
+            return false;
+        });
+        table.render({
+            elem: '#demo'
+            ,cols:[
+                [ //标题栏
+                    {field: 'saleNumber', title: '销售单号', sort: true}
+                    ,{field: 'saleDate', title: '销售日期', templet: '<div>{{ layui.util.toDateString(d.purchaseDate) }}</div>'}
+                    ,{templet:'<div>{{createrFormat(d.customer.name)}}</div>', title: '供应商'}
+                    ,{field: 'amountPayable', title: '销售金额'}
+                    ,{templet:'<div>{{createrFormat(d.user.userName)}}</div>', title: '操作员'}
+                    ,{field: 'remarks', title: '备注'}
+
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
+                ]
+            ]
+            ,url:'/SaleList/selectAllSaleList'
+            //,skin: 'line' //表格风格
+            // ,even: true
+            ,page: true //是否显示分页
+            //,limits: [5, 7, 10]
+            //,limit: 5 //每页默认显示的数量
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function(obj) {
+            console.log(obj)
+        });
+        //下拉框获取
+        $.ajax({
+            url: '/Customer/selectAll',
+            dataType: 'json',
+            type: 'post',
+            success: function (data) {
+                $.each(data, function (index, item) {
+                    $('#otype').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+                });
+                layui.form.render("select");
+            }
+        });
+        laydate.render({
+            elem: '#test5',
+            format:'yyyy-MM-dd'
+        });
+        laydate.render({
+            elem: '#test6',
+            format:'yyyy-MM-dd'
+        });
+        //监听工具条
+        table.on('tool(demo)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                var detailFrom = layui.layer.open({
+                    title : "查看学生信息",
+                    type : 2,
+                    content : "/route/system/role/roledetail",//弹出层页面
+                    area: ['500px', '200px'],
+                    success : function(layero, index){
+                        var body = layui.layer.getChildFrame('body', index);
+                        body.find("#id").text(data.id);
+                        body.find("#roleName").text(data.roleName);
+                        body.find("#roleDesc").text(data.roleDesc);
+                        body.find("#roleValue").text(data.roleValue);
+                        body.find("#isDisable").text(data.isDisable);
+                    }});
+            }
+            if (obj.event === 'del') {
+                layer.confirm('真的删除该学生吗？', function(index) {
+                    var data = obj.data;
+                    $.ajax({
+                        //几个参数需要注意一下
+                        type: "POST",//方法类型
+                        dataType: "json",//预期服务器返回的数据类型
+                        url: "/SysRole/deleteRole",//url
+                        data: data,
+                        success: function (result) {
+                            if (result.code == "0") {
+                                layer.close(index);
+                                layer.msg('删除角色成功');
+                                layui.table.reload('idTest',{page:{curr:1}});
+                            }else{
+                                layer.msg('删除角色失败', {
+                                    icon: 5
+                                });
+                            }
+                        },
+                        error : function() {
+                            layer.msg('服务器错误', {
+                                icon: 5
+                            });
+                        }
+                    });
+                });
+            }
+            if (obj.event === 'edit') {
+                var editFrom = layui.layer.open({
+                    title : "编辑学生信息",
+                    type : 2,
+                    content : "/route/system/role/roleedit",//弹出层页面
+                    area: ['800px', '400px'],
+                    success : function(layero, index){
+                        var body = layui.layer.getChildFrame('body', index);
+                        //获取窗口对象
+                        var iframeWindow = layero.find('iframe')[0].contentWindow;
+                        body.find("#id").val(data.id);
+                        body.find("#roleName").val(data.roleName);
+                        body.find("#roleDesc").val(data.roleDesc);
+                        body.find("#roleValue").val(data.roleValue);
+                        body.find("#isDisable").val(data.isDisable);
+                        body.find(".studentSex option[value="+data.studentSex+"]").attr("selected","selected");
+                        iframeWindow.layui.form.render();
+                        iframeWindow.layui.form.render('select');
+                    }});
+            }
+            if(obj.event=='bindUser'){
+                $.ajax({
+                    //几个参数需要注意一下
+                    type: "POST",//方法类型
+                    // dataType: "json",//预期服务器返回的数据类型
+                    data: data,
+                    url: "/SysRole/selectRoleUser",//url
+
+                });
+                window.location.href='/route/system/role/bindUser';
+            }
+            if(obj.event=='bindAction'){
+                $.ajax({
+                    //几个参数需要注意一下
+                    type: "POST",//方法类型
+                    // dataType: "json",//预期服务器返回的数据类型
+                    data: data,
+                    url: "/SysRole/selectRoleUser",//url
+                });
+                window.location.href='/route/system/action/bindaction';
+            }
+            if(obj.event=='look'){
+                console.log("data");
+                console.log(data);
+                console.log(data.id);
+                var id=data.id;
+                $.ajax({
+                    //几个参数需要注意一下
+                    type: "POST",//方法类型
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: "/SaleListGoods/selectBySaleListId?page=1&limit=10&id="+id,//url
+                    success:function (data) {
+                        console.log(data);
+                        var datajson= JSON.parse(JSON.stringify(data.data));
+                        console.log("datajson");
+                        console.log(datajson);
+                        table.render({
+                            elem: '#dgt'
+                            ,cols:[
+                                [ //标题栏
+                                    {field: 'code', title: '商品编码', sort: true}
+                                    ,{field: 'name', title: '商品名称'}
+                                    ,{field: 'model', title: '商品类型'}
+                                    ,{field: 'price', title: '单价'}
+                                    ,{field: 'num', title: '数量'}
+                                    ,{field: 'total', title: '总金额'}
+                                ]
+                            ]
+                            ,data:datajson
+                            //,skin: 'line' //表格风格
+                            // ,even: true
+                            // ,page: true //是否显示分页
+                            //,limits: [5, 7, 10]
+                            //,limit: 5 //每页默认显示的数量
+                        });
+                    }
+                });
+
+                layer.open({
+                    type: 1,
+                    title: '商品信息',
+                    shadeClose: true,
+                    shade: false,
+                    resize:true,
+                    /*    maxmin: true,  *///开启最大化最小化按钮
+                    area: ['800px', '400px'],
+                    // content: '/studentAdd.html'
+                    content: $('#dg')
+                });
+            }
+
+        });
+
+        //触发事件
+        var active = {
+            tabAdd : function() {
+
+                layer.open({
+                    type: 2,
+                    title: '添加角色信息',
+                    shadeClose: true,
+                    shade: false,
+                    /*    maxmin: true,  *///开启最大化最小化按钮
+                    area: ['800px', '400px'],
+                    content: '/route/system/role/roldadd'
+                });
+
+            },search:function(){
+                var name=$("#studentNameSearch").val();
+                table.reload('idTest',{
+                    method: 'POST'
+                    , where: {"roleValue":name},page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+
+                });
+            }
+        };
+
+        $('#studentSearch .layui-btn').on('click', function() {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>
+</html>

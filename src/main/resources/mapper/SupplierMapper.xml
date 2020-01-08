@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfm.wms.dao.SupplierMapper">
+    <resultMap id="BaseResultMap" type="com.lfm.wms.model.Supplier">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="concat" jdbcType="VARCHAR" property="concat"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+    <select id="selectAllSupplier" parameterType="com.lfm.wms.model.Supplier" resultMap="BaseResultMap">
+        select * from supplier
+        where 1=1
+        <if test="name !=null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
+    <update id="updateSupplier" parameterType="com.lfm.wms.dao.SupplierMapper">
+         update supplier
+        set address=#{address},concat=#{concat},
+        name=#{name},phone=#{phone},remark=#{remark}
+        where id =
+        #{id}
+    </update>
+    <delete id="deleteSupplier" parameterType="com.lfm.wms.dao.SupplierMapper">
+      delete from supplier where id=#{id}
+    </delete>
+    <insert id="addSupplier" parameterType="com.lfm.wms.dao.SupplierMapper">
+        insert into supplier (address,concat,name,phone,remark) values (#{address},#{concat},#{name},#{phone},#{remark});
+    </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+         select * from supplier
+    </select>
+</mapper>
