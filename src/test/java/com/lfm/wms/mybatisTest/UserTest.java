@@ -26,7 +26,7 @@ import java.util.*;
 @SpringBootTest
 
 public class UserTest {
-  @Autowired
+ /* @Autowired
     private UserInfoService userInfoService;
   @Autowired
     private UserRoleService userRoleService;
@@ -79,8 +79,8 @@ public class UserTest {
     }
     @Test
     public void selectAllRole(){
-    /*    SysRole sysRole=new SysRole();
-        List<SysRole> list=sysRoleService.getAll(sysRole,1,10);*/
+    *//*    SysRole sysRole=new SysRole();
+        List<SysRole> list=sysRoleService.getAll(sysRole,1,10);*//*
     }
     @Test
     public void addRole(){
@@ -131,14 +131,14 @@ public class UserTest {
    }
    @Test
    public void selectRoleUser1() {
-     /*  SysRole sysRole=new SysRole();
+     *//*  SysRole sysRole=new SysRole();
        sysRole.setId(1);
        List<UserInfo> list= sysRoleService.selectRoleUser1(sysRole);
        System.out.println(list.size());
        for(UserInfo userInfo:list){
            System.out.println(userInfo);
        }
-   */
+   *//*
    }
    @Test
     public void bindUser(){
@@ -200,13 +200,13 @@ public class UserTest {
     }
     @Test
     public void selectAllGoods(){
-    /*    Goods goods=new Goods();
+    *//*    Goods goods=new Goods();
         List<Goods> list=new ArrayList();
         list=goodsMapper.selectAllGoods(goods);
         for (Goods lost:list){
             System.out.println(lost);
         }
-        System.out.println(list.size());*/
+        System.out.println(list.size());*//*
     Goods goods=new Goods();
     GoodStype goodStype=new GoodStype();
     goodStype.setId(10);
@@ -272,5 +272,5 @@ public class UserTest {
         List<PurchaseList> list=new ArrayList<>();
         list=purchaseListMapper.selectAllPurchase2(purchaseList);
         System.out.println(purchaseList);
-    }
+    }*/
 }

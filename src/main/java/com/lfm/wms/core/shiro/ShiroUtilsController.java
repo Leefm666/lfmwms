@@ -31,7 +31,7 @@ public class ShiroUtilsController {
     private ShiroService shiroService;
     @RequestMapping("/noLogin")
     public String noLogin() {
-       return "/login";
+       return "login";
     }
     @ResponseBody
     @GetMapping("/noAuthorize")

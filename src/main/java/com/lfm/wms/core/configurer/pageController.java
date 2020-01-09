@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class pageController {
     @GetMapping("/{pageName}")
     public String Rout(@PathVariable String pageName){
-        return "/"+pageName;
+        return pageName;
     }
     @GetMapping("/{pageName}/{pageName2}")
     public String Rout(@PathVariable String pageName,@PathVariable String pageName2){
-        return "/"+pageName+"/"+pageName2;
+        return pageName+"/"+pageName2;
     }
     @GetMapping("/{pageName}/{pageName2}/{pageName3}")
     public String Rout(@PathVariable String pageName,@PathVariable String pageName2, @PathVariable String  pageName3){
-        return "/"+pageName+"/"+pageName2+"/"+pageName3;
+        return pageName+"/"+pageName2+"/"+pageName3;
     }
 
 }
